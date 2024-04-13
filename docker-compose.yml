@@ -1,9 +1,8 @@
-version: "3.9"
-name: pizzeria_db
+version: "3.3"
 services:
   postgres:
     container_name: PIZZERIA
-    image: postgres:16.2
+    image: postgres:16-alpine
     environment:
       POSTGRES_DB: "DB_Pizzeria"
       POSTGRES_USER: "admin"
