@@ -1,0 +1,14 @@
+version: "3.9"
+name: pizzeria_db
+services:
+  postgres:
+    container_name: PIZZERIA
+    image: postgres:16.2
+    environment:
+      POSTGRES_DB: "DB_Pizzeria"
+      POSTGRES_USER: "admin"
+      POSTGRES_PASSWORD: "PIZZA"
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+    ports: 
+      - "5432:5432"
