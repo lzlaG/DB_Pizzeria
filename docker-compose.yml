@@ -9,5 +9,6 @@ services:
       POSTGRES_PASSWORD: "PIZZA"
     volumes:
       - ./sql:/docker-entrypoint-initdb.d
+      - ./data:/my_data
     ports: 
       - "5432:5432"

@@ -2,7 +2,7 @@ CREATE TABLE Клиенты (
     client_id INT PRIMARY KEY NOT NULL,
     full_name VARCHAR(100),
     adress  VARCHAR(100),
-    phone_number VARCHAR(10)
+    phone_number VARCHAR(18)
 );
 CREATE TABLE Поставщики (
     supplier_id INT PRIMARY KEY NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE Поставщики (
 );
 
 CREATE TABLE Продавцы (
-    customer_id INT PRIMARY KEY NOT NULL,
+    seller_id INT PRIMARY KEY NOT NULL,
     full_name VARCHAR(100),
     salary INT
     -- мб num_of_complited_orders INT,--
@@ -20,7 +20,8 @@ CREATE TABLE Продавцы (
 CREATE TABLE Блюда (
     dishe_id INT PRIMARY KEY NOT NULL,
     naming VARCHAR(50),
-    calory INT
+    calory INT,
+    price_of_dish INT
 );
 
 CREATE TABLE Ингридиенты (
@@ -44,7 +45,7 @@ CREATE TABLE Поставки (
 
 CREATE TABLE Штрафы (
     penalty_id INT PRIMARY KEY NOT NULL,
-    customer INT REFERENCES Продавцы(customer_id),
+    customer INT REFERENCES Продавцы(seller_id),
     sum_of_penalty INT
 );
 
@@ -56,7 +57,7 @@ CREATE TABLE Статус_заказа(
 CREATE TABLE Заказы(
     order_id INT PRIMARY KEY NOT NULL,
     client INT REFERENCES Клиенты(client_id),
-    customer INT REFERENCES Продавцы (customer_id),
+    seller INT REFERENCES Продавцы (seller_id),
     status_of_order INT REFERENCES Статус_заказа(status_id),
     date_of_order date,
     sum_of_order INT
