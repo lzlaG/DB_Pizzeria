@@ -66,9 +66,7 @@ CREATE TABLE Заказы(
 
 CREATE TABLE Состав_заказа(
     order_id INT REFERENCES Заказы(order_id),
-    dishe_id INT REFERENCES Блюда(dishe_id),
-    amount INT
+    dishe_id INT REFERENCES Блюда(dishe_id)
 );
-
 
 
