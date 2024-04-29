@@ -32,7 +32,8 @@ CREATE TABLE Ингридиенты (
 
 CREATE TABLE Состав_Блюда(
     dishe_id INT REFERENCES Блюда(dishe_id),
-    ingridient_id INT REFERENCES Ингридиенты(ingridient_id)
+    ingridient_id INT REFERENCES Ингридиенты(ingridient_id),
+    amount_of_ingridients INT
 );
 
 CREATE TABLE Поставки (
@@ -65,7 +66,8 @@ CREATE TABLE Заказы(
 
 CREATE TABLE Состав_заказа(
     order_id INT REFERENCES Заказы(order_id),
-    dishe_id INT REFERENCES Блюда(dishe_id)
+    dishe_id INT REFERENCES Блюда(dishe_id),
+    amount INT
 );
 
 

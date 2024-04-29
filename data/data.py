@@ -69,11 +69,11 @@ def Orders(id):
     end_date = datetime(2024,4,30)
     return [id, random.randint(1,15), random.randint(1,15),random.randint(1,3),fake.date_between_dates(start_date, end_date), 1]
 
-def Sostav_of_dish(id,k):
-    return [id,k]
+def Sostav_of_dish(id,k,x):
+    return [id,k,x]
 
-def Sostav_of_order(id,k):
-    return [id,k]
+def Sostav_of_order(id,k,x):
+    return [id,k,x]
 
 with open ('./data/clients.csv', 'w') as csvfile:
     writer = csv.writer(csvfile)
@@ -97,30 +97,46 @@ with open('./data/orders.csv', 'w') as csvfile:
 
 with open('./data/sostav_of_dish.csv', 'w') as csvfile:
     writer = csv.writer(csvfile)
-    writer.writerow(['id_блюда', 'id_ингридиента'])
+    writer.writerow(['id_блюда', 'id_ингридиента', 'количество ингридиентов'])
     for i in range(15):
+        x = random.randint(3,5)
         numbers = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
-        uniq_numbers = fake.words(nb=3, ext_word_list=numbers, unique=True)
-        writer.writerow(Sostav_of_dish(i+1,uniq_numbers[0]))
-        writer.writerow(Sostav_of_dish(i+1,uniq_numbers[1]))
-        writer.writerow(Sostav_of_dish(i+1,uniq_numbers[2]))
+        uniq_numbers = fake.words(nb=5, ext_word_list=numbers, unique=True)
+        if x ==3:
+            writer.writerow(Sostav_of_dish(i+1,uniq_numbers[0],x))
+            writer.writerow(Sostav_of_dish(i+1,uniq_numbers[1],x))
+            writer.writerow(Sostav_of_dish(i+1,uniq_numbers[2],x))
+        if x==4:
+            writer.writerow(Sostav_of_dish(i+1,uniq_numbers[0],x))
+            writer.writerow(Sostav_of_dish(i+1,uniq_numbers[1],x))
+            writer.writerow(Sostav_of_dish(i+1,uniq_numbers[2],x))
+            writer.writerow(Sostav_of_dish(i+1,uniq_numbers[3],x))
+        if x==5:
+            writer.writerow(Sostav_of_dish(i+1,uniq_numbers[0],x))
+            writer.writerow(Sostav_of_dish(i+1,uniq_numbers[1],x))
+            writer.writerow(Sostav_of_dish(i+1,uniq_numbers[2],x))
+            writer.writerow(Sostav_of_dish(i+1,uniq_numbers[3],x))
+            writer.writerow(Sostav_of_dish(i+1,uniq_numbers[4],x))
+
+
 
 with open('./data/sostav_of_order.csv', 'w') as csvfile:
     writer = csv.writer(csvfile)
-    writer.writerow(['id_заказа', 'id_блюда'])
+    writer.writerow(['id_заказа', 'id_блюда', 'amount'])
     for i in range(15):
         amount_of_dishes = random.randint(1,3)
         numbers = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+        x = random.randint(3,5)
         uniq_numbers = fake.words(nb=3, ext_word_list=numbers, unique=True)
         if amount_of_dishes == 1:
-            writer.writerow(Sostav_of_order(i+1, uniq_numbers[0]))
+            writer.writerow(Sostav_of_order(i+1, uniq_numbers[0],x))
         if amount_of_dishes == 2:
-            writer.writerow(Sostav_of_order(i+1,uniq_numbers[0]))
-            writer.writerow(Sostav_of_order(i+1,uniq_numbers[1]))
+            writer.writerow(Sostav_of_order(i+1,uniq_numbers[0],x))
+            writer.writerow(Sostav_of_order(i+1,uniq_numbers[1],x))
         if amount_of_dishes == 3:
-            writer.writerow(Sostav_of_order(i+1,uniq_numbers[0]))
-            writer.writerow(Sostav_of_order(i+1,uniq_numbers[1]))
-            writer.writerow(Sostav_of_order(i+1,uniq_numbers[2]))
+            writer.writerow(Sostav_of_order(i+1,uniq_numbers[0],x))
+            writer.writerow(Sostav_of_order(i+1,uniq_numbers[1],x))
+            writer.writerow(Sostav_of_order(i+1,uniq_numbers[2],x))
 
 with open ('./data/supply.csv', 'w') as csvfile:
     writer = csv.writer(csvfile)
