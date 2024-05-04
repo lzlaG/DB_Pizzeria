@@ -13,4 +13,4 @@ jobs:
       - name: build container
         run: docker compose -p pizza build
       - name: up container
-        run: docker compose -p pizza up
+        run: docker compose -p pizza up -d
