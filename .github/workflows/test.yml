@@ -1,6 +1,7 @@
 name: test
 on: push
 jobs:
+  runs-on: self-hosted
   set_up_env:
   steps:
     - name: setup_env
