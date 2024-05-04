@@ -12,6 +12,12 @@ jobs:
     steps:
       - name: setup port
         run: echo DB_PORT=${{ secrets.DB_PORT }} >> .env
+      - name: setup user of db
+        run: echo DB_USER=${{secrets.POSTGRES_USER}} >> .env
+      - name: setup password of user for db
+        run: echo DB_PASSWORD=${{secrets.POSTGRES_PASSWORD}} >> .env
+      - name: setup db name
+        run: echo DB_NAME=${{secrets.DB_NAME}} >> .env
   deploy:
     needs: [setup_env]
     runs-on: self-hosted
