@@ -11,4 +11,4 @@ services:
       - ./sql:/docker-entrypoint-initdb.d
       - ./data:/my_data
     ports: 
-      - "5432:5432"
+      - "${{secrets.DB_PORT}}:5432"
