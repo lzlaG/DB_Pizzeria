@@ -7,15 +7,16 @@ from datetime import datetime, timedelta
 fake = Faker('ru_RU')
 
 def Clients (id):
-    return [id,fake.name(), fake.street_address(),fake.phone_number()]
+    name = fake.last_name()+' '+fake.middle_name()+' '+fake.first_name()
+    return [id,name, fake.street_address(),fake.phone_number()]
 
 
 def Suppliers(id):
     return [id, fake.company()]
 
 def Sellers(id):
-    x = random.randint(18000, 100000)
-    return [id, fake.name(), x]
+    name = fake.last_name()+' '+fake.middle_name()+' '+fake.first_name()
+    return [id, name]
 
 def Supply(id):
     start_date = datetime(2024,4,1)
@@ -67,7 +68,7 @@ def Ingridients(id):
 def Orders(id):
     start_date = datetime(2024,4,1)
     end_date = datetime(2024,4,30)
-    return [id, random.randint(1,15), random.randint(1,15),random.randint(1,3),fake.date_between_dates(start_date, end_date), 1]
+    return [id, random.randint(1,15), random.randint(1,15),random.randint(1,2),fake.date_between_dates(start_date, end_date), random.randint(1919,14000)]
 
 def Sostav_of_dish(id,k,x):
     return [id,k,x]

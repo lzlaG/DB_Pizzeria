@@ -1,3 +1,4 @@
+-- Active: 1714833064147@@185.198.166.80@34657@DB_PIZZA_ACTION
 -- 1
 -- Количество клиентов, которых обслужили за месяц. РАБОТАЕТ
 
@@ -17,19 +18,25 @@ ORDER BY Клиенты.full_name ASC;
 -- 3
 -- Вычислить зарплату всех продавцов. В итоговой ведомости указать Имя,
 -- Отчество, Фамилию продавца, количество выполненных и невыполненных им заказов,
--- оплату за выполненные заказы и штрафы за невыполненные, итоговую причитающуюся СОМНИТЕЛЬНО
+-- оплату за выполненные заказы и штрафы за невыполненные, итоговую причитающуюся РАБОТАЕТ
 -- сумму продавцу.
-SELECT Продавцы.full_name AS Имя,
-Продавцы.salary AS Зарплата,
-COUNT(CASE WHEN Заказы.status_of_order = 1 THEN Заказы.order_id END) AS количество_выполненных_заказов,
-COUNT(CASE WHEN Заказы.status_of_order = 2 THEN Заказы.order_id END) AS количество_невыполненных_заказов,
-SUM(CASE WHEN Заказы.status_of_order = 1 THEN Заказы.sum_of_order ELSE 0 END) AS оплата_за_выполненные_заказы,
-SUM(CASE WHEN Заказы.status_of_order = 2 THEN Штрафы.sum_of_penalty ELSE 0 END) AS штрафы_за_невыполненные_заказы,
-Продавцы.salary + SUM(CASE WHEN Заказы.status_of_order = 1 THEN Заказы.sum_of_order ELSE 0 END) - SUM(CASE WHEN Заказы.status_of_order = 2 THEN Штрафы.sum_of_penalty ELSE 0 END) AS Итоговая_сумма
+SELECT
+    Продавцы.full_name AS Имя,
+    COUNT(CASE WHEN Заказы.status_of_order = 1 THEN Заказы.order_id END) AS количество_выполненных_заказов,
+	SUM(CASE WHEN Заказы.status_of_order = 1 THEN Заказы.sum_of_order * 0.1 ELSE 0 END) AS оплата_за_выполненные_заказы,
+    COUNT(CASE WHEN Заказы.status_of_order = 2 THEN Заказы.order_id END) AS количество_невыполненных_заказов,
+    SUM(CASE WHEN Заказы.status_of_order = 2 THEN Заказы.sum_of_order * 0.5 ELSE 0 END) AS штраф_за_невыполненный_заказ,
+	COALESCE(SUM(Штрафы.sum_of_penalty), 0) AS штраф_по_ведомости,
+    CASE 
+        WHEN SUM(CASE WHEN Заказы.status_of_order = 1 THEN Заказы.sum_of_order * 0.1 ELSE 0 END) - SUM(CASE WHEN Заказы.status_of_order = 2 THEN Заказы.sum_of_order * 0.5 ELSE 0 END) - COALESCE(SUM(Штрафы.sum_of_penalty), 0) < 0 
+        THEN 0 
+        ELSE SUM(CASE WHEN Заказы.status_of_order = 1 THEN Заказы.sum_of_order * 0.1 ELSE 0 END) - SUM(CASE WHEN Заказы.status_of_order = 2 THEN Заказы.sum_of_order * 0.5 ELSE 0 END) - COALESCE(SUM(Штрафы.sum_of_penalty), 0) 
+    END AS Итоговая_сумма
 FROM Продавцы
 LEFT JOIN Заказы ON Продавцы.seller_id = Заказы.seller
 LEFT JOIN Штрафы ON Продавцы.seller_id = Штрафы.customer
 GROUP BY Продавцы.seller_id;
+
 
 -- 4 
 -- Сколько денег потратили сами продавцы на продукцию своей фирмы.
@@ -52,7 +59,7 @@ LEFT JOIN Состав_заказа ON Блюда.dishe_id = Состав_зак
 GROUP BY Блюда.naming
 ORDER BY количество_продаж DESC;
 -- 6 
--- Прибыль, полученная фирмой. Не учитывать зарплату продавцам, считать прибыль7
+-- Прибыль, полученная фирмой. Не учитывать зарплату продавцам, считать прибыль
 -- как разницу между закупочной стоимостью потраченных ингредиентов и продажной. НЕ РАБОТАЕТ
 SELECT 
     SUM(Заказы.sum_of_order) - SUM(Поставки.amount_of_ingridients * Ингридиенты.price) AS Прибыль
@@ -136,13 +143,17 @@ GROUP BY seller_id, full_name
 ORDER BY total_orders DESC
 LIMIT 1;
 
--- 10.3  не работает
-SELECT seller_id, full_name, COUNT(penalty_id) AS total_penalties
-FROM Штрафы
-JOIN Продавцы ON Штрафы.customer = Продавцы.seller_id
-GROUP BY seller_id, full_name
-ORDER BY total_penalties ASC
+-- 10.3  работает
+SELECT 
+Продавцы.full_name AS Имя_продавца,
+COUNT(CASE WHEN Заказы.status_of_order = 2 THEN Заказы.order_id END) AS количество_невыполненных_заказов
+FROM Продавцы
+LEFT JOIN Заказы ON Продавцы.seller_id = Заказы.seller
+WHERE Заказы.status_of_order = 2
+GROUP BY Продавцы.full_name
+ORDER BY количество_невыполненных_заказов ASC
 LIMIT 1;
+
 
 -- 6
 -- Прибыль, полученная фирмой. Не учитывать зарплату продавцам, считать прибыль7

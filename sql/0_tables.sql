@@ -11,8 +11,7 @@ CREATE TABLE Поставщики (
 
 CREATE TABLE Продавцы (
     seller_id INT PRIMARY KEY NOT NULL,
-    full_name VARCHAR(100),
-    salary INT
+    full_name VARCHAR(100)
     -- мб num_of_complited_orders INT,--
     -- мб num_of_uncomplited_orders INT--
 );

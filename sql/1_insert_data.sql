@@ -9,7 +9,6 @@ COPY Состав_Блюда FROM '/my_data/sostav_of_dish.csv' DELIMITER ',' CS
 INSERT INTO Статус_заказа
 VALUES
 (1, 'выполнен'),
-(2, 'не выполнен'),
-(3, 'возврат');
+(2, 'не выполнен');
 COPY Заказы FROM '/my_data/orders.csv' DELIMITER ',' CSV HEADER;
 COPY Состав_заказа FROM '/my_data/sostav_of_order.csv' DELIMITER ',' CSV HEADER;
