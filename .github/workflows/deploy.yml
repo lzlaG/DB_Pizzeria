@@ -6,8 +6,14 @@ jobs:
     steps:
       - name: check repo
         uses: actions/checkout@v4
-  deploy:
+  setup_env:
     needs: [check_repo]
+    runs-on: self-hosted
+    steps:
+      - name: setup port
+        run: echo DB_PORT=${{ secrets.DB_PORT }} >> .env
+  deploy:
+    needs: [setup_env]
     runs-on: self-hosted
     steps:
       - name: build container
