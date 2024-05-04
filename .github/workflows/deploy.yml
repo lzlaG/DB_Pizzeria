@@ -6,5 +6,11 @@ jobs:
     steps:
       - name: check repo
         uses: actions/checkout@v4
-      - name: test
-        run: cat docker-compose.yml
+  deploy:
+    needs: [check_repo]
+    runs-on: self-hosted
+    steps:
+      - name: build container
+        run: docker-compose -p pizza build
+      - name: up container
+        run: docker-compose -p pizza up
