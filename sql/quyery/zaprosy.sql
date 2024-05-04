@@ -1,43 +1,35 @@
 -- 1
--- Количество клиентов, которых обслужили за месяц. не робит
+-- Количество клиентов, которых обслужили за месяц. РАБОТАЕТ
 
 SELECT COUNT(DISTINCT client)
 FROM Заказы
-WHERE EXTRACT(MONTH FROM date_of_order) = 3;
+WHERE EXTRACT(MONTH FROM date_of_order) = 4;
 
 -- 2
 -- Сколько каждый из клиентов сделал заказов, вывести все личные данные 
 --клиента, количество заказов и сумму заказов. Вывести в алфавитном порядке. СОМНИТЕЛЬНО
-SELECT 
-    c.client_id,
-    c.full_name,
-    c.adress,
-    c.phone_number,
-    COUNT(o.order_id) AS количество_заказов,
-    SUM(o.sum_of_order) AS сумма_заказов
-FROM  Клиенты c
-LEFT JOIN Заказы o ON c.client_id = o.client
-GROUP BY c.client_id, c.full_name, c.adress, c.phone_number
-ORDER BY  c.full_name;
+SELECT Клиенты.full_name, Клиенты.adress, Клиенты.phone_number, COUNT(Заказы.order_id) AS количество_заказов, SUM(Заказы.sum_of_order) AS сумма_заказов
+FROM Клиенты
+LEFT JOIN Заказы ON Клиенты.client_id = Заказы.client
+GROUP BY Клиенты.client_id
+ORDER BY Клиенты.full_name ASC;
 
 -- 3
 -- Вычислить зарплату всех продавцов. В итоговой ведомости указать Имя,
 -- Отчество, Фамилию продавца, количество выполненных и невыполненных им заказов,
 -- оплату за выполненные заказы и штрафы за невыполненные, итоговую причитающуюся СОМНИТЕЛЬНО
 -- сумму продавцу.
-SELECT
-    p.full_name,
-    p.salary,
-    COUNT(CASE WHEN o.status_of_order = 1 THEN 1 END) AS выполненные_заказы,
-    COUNT(CASE WHEN o.status_of_order = 2 THEN 1 END) AS невыполненные_заказы,
-    COALESCE(SUM(CASE WHEN o.status_of_order = 1 THEN o.sum_of_order END), 0) AS оплата_за_выполненные_заказы,
-    COALESCE(SUM(CASE WHEN o.status_of_order = 2 THEN penalty.sum_of_penalty END), 0) AS штрафы_за_невыполненные_заказы,
-    COALESCE(SUM(CASE WHEN o.status_of_order = 1 THEN o.sum_of_order ELSE -penalty.sum_of_penalty END), 0) AS итоговая_сумма
-FROM Продавцы p
-LEFT JOIN Заказы o ON p.seller_id = o.seller
-LEFT JOIN Штрафы penalty ON p.seller_id = penalty.customer
-GROUP BY p.full_name, p.salary
-ORDER BY p.full_name;
+SELECT Продавцы.full_name AS Имя,
+Продавцы.salary AS Зарплата,
+COUNT(CASE WHEN Заказы.status_of_order = 1 THEN Заказы.order_id END) AS количество_выполненных_заказов,
+COUNT(CASE WHEN Заказы.status_of_order = 2 THEN Заказы.order_id END) AS количество_невыполненных_заказов,
+SUM(CASE WHEN Заказы.status_of_order = 1 THEN Заказы.sum_of_order ELSE 0 END) AS оплата_за_выполненные_заказы,
+SUM(CASE WHEN Заказы.status_of_order = 2 THEN Штрафы.sum_of_penalty ELSE 0 END) AS штрафы_за_невыполненные_заказы,
+Продавцы.salary + SUM(CASE WHEN Заказы.status_of_order = 1 THEN Заказы.sum_of_order ELSE 0 END) - SUM(CASE WHEN Заказы.status_of_order = 2 THEN Штрафы.sum_of_penalty ELSE 0 END) AS Итоговая_сумма
+FROM Продавцы
+LEFT JOIN Заказы ON Продавцы.seller_id = Заказы.seller
+LEFT JOIN Штрафы ON Продавцы.seller_id = Штрафы.customer
+GROUP BY Продавцы.seller_id;
 
 -- 4 
 -- Сколько денег потратили сами продавцы на продукцию своей фирмы.
@@ -61,7 +53,7 @@ GROUP BY Блюда.naming
 ORDER BY количество_продаж DESC;
 -- 6 
 -- Прибыль, полученная фирмой. Не учитывать зарплату продавцам, считать прибыль7
--- как разницу между закупочной стоимостью потраченных ингредиентов и продажной. РАБОТАЕТ
+-- как разницу между закупочной стоимостью потраченных ингредиентов и продажной. НЕ РАБОТАЕТ
 SELECT 
     SUM(Заказы.sum_of_order) - SUM(Поставки.amount_of_ingridients * Ингридиенты.price) AS Прибыль
 FROM 
@@ -89,7 +81,7 @@ GROUP BY Блюда.naming, Блюда.calory;
 
 -- 8 
 -- Отчет по поставкам. Указать поставщика, наименование ингредиента,
---количество поставленного ингредиента за 10.2001
+--количество поставленного ингредиента за 10.2001 РАБОТАЕТ
 SELECT
     Поставщики.naming AS Поставщик,
     Ингридиенты.naming AS Наименование_ингредиента,
@@ -101,8 +93,8 @@ JOIN
 JOIN
     Ингридиенты ON Поставки.ingridient = Ингридиенты.ingridient_id
 WHERE
-    EXTRACT(YEAR FROM Поставки.date_of_suply) = 2001
-    AND EXTRACT(MONTH FROM Поставки.date_of_suply) = 10;
+    EXTRACT(YEAR FROM Поставки.date_of_suply) = 2024
+    AND EXTRACT(MONTH FROM Поставки.date_of_suply) = 4;
 
 -- 9 
 -- Список использованных ингредиентов и их количества, по каждой неделе.
@@ -128,7 +120,7 @@ ORDER BY
 
 
 -- 10
--- 10.1 
+-- 10.1 РАБОТАЕТ
 SELECT seller_id, full_name, SUM(sum_of_order) AS total_sales
 FROM Заказы
 JOIN Продавцы ON Заказы.seller = Продавцы.seller_id
@@ -136,7 +128,7 @@ GROUP BY seller_id, full_name
 ORDER BY total_sales DESC
 LIMIT 1;
 
--- 10.2 
+-- 10.2 РАБОТАЕТ
 SELECT seller_id, full_name, COUNT(order_id) AS total_orders
 FROM Заказы
 JOIN Продавцы ON Заказы.seller = Продавцы.seller_id
