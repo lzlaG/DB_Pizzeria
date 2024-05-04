@@ -33,6 +33,8 @@ jobs:
         run: docker compose -p pizza build
       - name: up container
         run: docker compose -p pizza up -d
+      - name: add container to autostart
+        run: docker update --restart=on-failure PIZZERIA
   clear_env:
     needs: [deploy]
     runs-on: self-hosted
