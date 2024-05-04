@@ -7,8 +7,9 @@ services:
       POSTGRES_DB: "DB_Pizzeria"
       POSTGRES_USER: "admin"
       POSTGRES_PASSWORD: "PIZZA"
+      DB_PORT: ${{secrets.DB_PORT}}
     volumes:
       - ./sql:/docker-entrypoint-initdb.d
       - ./data:/my_data
     ports: 
-      - "${{secrets.DB_PORT}}:5432"
+      - "${DB_PORT}:5432"
