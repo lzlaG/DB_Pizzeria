@@ -1,8 +1,9 @@
 name: test
 on: push
 jobs:
-  test:
-    runs-on: self-hosted
-    steps:
-      - name: check
-        run: echo "success"
+  set_up_env:
+  steps:
+    - name: setup_env
+      run: echo DB_PORT=${{ secrets.DB_PORT }} >> .env
+   
+  
