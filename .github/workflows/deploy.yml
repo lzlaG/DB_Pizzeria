@@ -26,7 +26,7 @@ jobs:
       - name: setup db name
         run: echo DB_NAME=${{secrets.DB_NAME}} >> .env
   deploy:
-    needs: [setup_env]
+    needs: [setup_env, clear_prev_docker]
     runs-on: self-hosted
     steps:
       - name: build container
