@@ -1,12 +1,8 @@
 name: test
 on: push
 jobs:
-  setup_env_job:
+  check_repo:
     runs-on: self-hosted
     steps:
-      - name: setup_env
-        run: echo DB_PORT=${{ secrets.DB_PORT }} >> .env
-        run: echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
-        run: echo DB_NAME=${{ secrets.DB_NAME }} >> .env
-        run: echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
-        run: echo DB_HOST=${{ secrets.DB_HOST }} >> .env
+      - name: check repo
+        uses: actions/checkout@v4
