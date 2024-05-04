@@ -6,6 +6,13 @@ jobs:
     steps:
       - name: check repo
         uses: actions/checkout@v4
+  clear_prev_docker:
+    runs-on: self-hosted
+    steps:
+      - name: stop container
+        run: docker stop PIZZERIA
+      - name: rm old container
+        run: docker rm PIZZERIA
   setup_env:
     needs: [check_repo]
     runs-on: self-hosted
@@ -26,3 +33,9 @@ jobs:
         run: docker compose -p pizza build
       - name: up container
         run: docker compose -p pizza up -d
+  clear_env:
+    needs: [deploy]
+    runs-on: self-hosted
+    steps:
+      - name: clear env
+        run: rm .env
