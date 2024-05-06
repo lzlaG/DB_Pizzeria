@@ -12,3 +12,4 @@ VALUES
 (2, 'не выполнен');
 COPY Заказы FROM '/my_data/orders.csv' DELIMITER ',' CSV HEADER;
 COPY Состав_заказа FROM '/my_data/sostav_of_order.csv' DELIMITER ',' CSV HEADER;
+COPY Штрафы FROM '/my_data/penalty.csv' DELIMITER ',' CSV HEADER;

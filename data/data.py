@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 
 fake = Faker('ru_RU')
 
+
 def Clients (id):
     name = fake.last_name()+' '+fake.middle_name()+' '+fake.first_name()
     return [id,name, fake.street_address(),fake.phone_number()]
@@ -14,14 +15,17 @@ def Clients (id):
 def Suppliers(id):
     return [id, fake.company()]
 
+
 def Sellers(id):
     name = fake.last_name()+' '+fake.middle_name()+' '+fake.first_name()
     return [id, name]
+
 
 def Supply(id):
     start_date = datetime(2024,4,1)
     end_date = datetime(2024,4,30)
     return [id, random.randint(1,15),random.randint(1,15),random.randint(1,10),str(fake.date_between_dates(start_date,end_date))]
+
 
 def Dishes(id):
     pizza_names = [
@@ -44,6 +48,7 @@ def Dishes(id):
     ]
     return [id, pizza_names[id], random.randint(250,1600),random.randint(1500,5000)]
 
+
 def Ingridients(id):
     ingredients = [
         "тесто для пиццы",
@@ -65,16 +70,24 @@ def Ingridients(id):
     ]
     return [id, ingredients[id], random.randint(25,600)]
 
+
 def Orders(id):
     start_date = datetime(2024,4,1)
     end_date = datetime(2024,4,30)
     return [id, random.randint(1,15), random.randint(1,15),random.randint(1,2),fake.date_between_dates(start_date, end_date), random.randint(1919,14000)]
 
+
 def Sostav_of_dish(id,k,x):
     return [id,k,x]
 
+
 def Sostav_of_order(id,k):
     return [id,k]
+
+
+def penalty(id):
+    return [id, random.randint(1,15),random.randint(500,2000)]
+
 
 with open ('./data/clients.csv', 'w') as csvfile:
     writer = csv.writer(csvfile)
@@ -152,3 +165,8 @@ with open('./data/dishes.csv', 'w') as csvfile:
     writer = csv.writer(csvfile)
     for i in range(16):
         writer.writerow(Dishes(i))
+
+with open('./data/penalty.csv', 'w') as csvfile:
+    writer = csv.writer(csvfile)
+    for i in range(8):
+        writer.writerow(penalty(i))
